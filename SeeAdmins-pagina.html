@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">	
+	<link rel="stylesheet" href="style-Admin.css">
+	<title>Administrador</title>
+</head>
+<body onload="CargarInfo()" id="main">
+	<div class="container">
+		<h2><font color="yellow">Registered ADMIN's</font></h2>	
+	</div>
+	<div class="Admin-box">
+		<button onclick="Regresar()" class="btn2" type="button">Return</button>
+	</div>
+	<div>
+	<table border="5" class="table">
+		<thead>
+			<tr>
+				<th scope="col"><font color="red">Name</font></th>
+				<th scope="col"><font color="red">Last Name</font></th>
+				<th scope="col"><font color="red">Username</font></th>
+			</tr>			
+		</thead>
+		<tbody id="CuerpoUsuarios"></tbody>		
+	</table>
+	</div>
+	
+<!--========================Declaracion de funciones, para los botones=================================-->
+<script>
+	function CargarInfo(){
+		var tabla = document.querySelector('#CuerpoUsuarios')
+
+		fetch('https://proyecto2-introduccion-program.herokuapp.com/VerAdmins')
+		.then(response => response.json())
+		.catch(error => {
+			console.log(error)
+		})
+		.then(res =>{
+			for(var i in res){
+				tabla.innerHTML +=
+				`<tr>
+				<th><font color="white"> ${res[i].nombre} </font></th>
+				<th><font color="white"> ${res[i].apellido} </font></th>
+				<th><font color="white"> ${res[i].usuario} </font></th>
+				</tr>
+				`			
+			}
+		})
+	}
+
+
+	function Regresar(){
+		location.href="StartingAdmin-pagina.html"
+	}
+	
+</script>
+
+</body>
+</html>

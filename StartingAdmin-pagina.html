@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">	
+	<link rel="stylesheet" href="style-Admin.css">
+	<title>Add Songs</title>
+</head>
+<body onload="CargarInfo()" id="main">
+	<h1 class="text-light"><a id="logeado"></a></h1>
+
+	<div class="container">
+		<br></br><h2><font color="yellow">Registered Users</font></h2>	
+	</div>
+	<div class="Admin-box">
+		<button onclick="CrearAdmin()" class="btn" type="button">Create a new Admin</button>
+		<button onclick="VerAdmins()" class="btn" type="button">See Admins</button>
+		<button onclick="CargarCanciones()" type="button"><i class="fa fa-music">Songs</i></button>
+		<button onclick="Salir()" class="btn2" type="button">Log Out</button>
+
+	</div>
+	<div>
+	<table border="5" class="table">
+		<thead>
+			<tr>
+				<th scope="col"><font color="red">Name</font></th>
+				<th scope="col"><font color="red">Last Name</font></th>
+				<th scope="col"><font color="red">Username</font></th>
+				<th scope="col"><font color="red">Actions</font></th>
+			</tr>			
+		</thead>
+		<tbody id="CuerpoUsuarios"></tbody>		
+	</table>
+	</div>
+	
+<!--========================Declaracion de funciones, para los botones=================================-->
+<script>
+	function CargarInfo(){
+		var nombre = document.querySelector('#logeado')
+		var iniciado = sessionStorage.usuario
+		nombre.innerHTML = `<font color="green">Welcome: </font><font color="white"> ${iniciado}</font>`
+		var tabla = document.querySelector('#CuerpoUsuarios')
+
+		fetch('https://proyecto2-introduccion-program.herokuapp.com/Personas')
+		.then(response => response.json())
+		.catch(error => {
+			console.log(error)
+		})
+		.then(res =>{
+			for(var i in res){
+				tabla.innerHTML +=
+				`<tr>
+				<th><font color="white"> ${res[i].nombre} </font></th>
+				<th><font color="white"> ${res[i].apellido} </font></th>
+				<th><font color="white"> ${res[i].usuario} </font></th>
+				<th><font color="white"> <button type="button" value="${res[i].usuario}" onclick="verUsuario(this)" class="btn3">Modify</button></th>
+				</tr>
+				`			
+			}
+		})
+	}
+
+	function verUsuario(boton){
+		var usuario = boton.value
+		sessionStorage.setItem("buscar",usuario)	
+		location.href="Admin-ModificarUsuario-pagina.html"
+	}
+
+
+	function CrearAdmin(){
+		location.href="NewAdmin-pagina.html"
+	}
+
+	function VerAdmins(){
+		location.href="SeeAdmins-pagina.html"
+	}
+
+	function CargarCanciones(){
+		location.href="Admin-songs-pagina.html"
+	}
+
+	function Salir(){
+		location.href="Login-pagina.html"
+	}
+	
+</script>
+
+</body>
+</html>

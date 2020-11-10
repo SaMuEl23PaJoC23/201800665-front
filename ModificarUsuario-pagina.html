@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">	
+		<link rel="stylesheet" href="style-NewUser-pagina2.css">
+		<title>Admin Session</title>
+	</head>
+
+<body onload="CargarInfo()" id="main">	
+	<div class="NewAdmin-box">				
+		<h2>Modify User</h2>
+		<div class="textbox">
+			<h4>Name</h4>						
+			<input id="nombre" type="text" placeholder="Name"/>					
+		</div>		
+		<div class="textbox">			
+			<h4>Last Name</h4>						
+			<input id="apellido" type="text" placeholder="Last Name"/>					
+		</div>				
+		<div class="textbox">			
+			<h4>UserName</h4>
+			<input id="usuario" type="text" placeholder="UserName"/>
+		</div>
+		<div class="textbox">			
+			<h4>Password</h4>
+			<input id="password" type="text" placeholder="password"/>					
+		</div>
+		<div class="textbox">						
+			<h4>Confirm Password</h4>
+			<input id="confirmpass" type="text" placeholder="Confirm password"/>					
+		</div>
+
+	<button onclick="Modificar()" class="btn" type="button"><b>Save</b></button>
+	<button onclick="Cancelar()" class="btn2" type="button">Return</button>
+	</div>
+	<!--========================Declaracion de funciones, para los botones=================================-->
+	<script>
+		function CargarInfo(){			
+			var cargar = sessionStorage.usuario
+			fetch(`https://proyecto2-introduccion-program.herokuapp.com/ConsultarPersona/${cargar}`)
+			.then(response => response.json())
+			.catch(error => {
+				console.log(error)
+			})
+			.then(res =>{
+				console.log(res)
+				document.querySelector('#nombre').value = res.nombre
+				document.querySelector('#apellido').value = res.apellido
+				document.querySelector('#usuario').value = res.usuario
+				document.querySelector('#password').value = res.password
+				document.querySelector('#confirmpass').value = res.confirmpass
+			})
+		}
+
+
+		function Modificar(){
+			var nombre=document.querySelector('#nombre').value
+			var apellido=document.querySelector('#apellido').value
+			var usuario=document.querySelector('#usuario').value
+			var password=document.querySelector('#password').value
+			var confirmpass=document.querySelector('#confirmpass').value
+			var objeto={
+				'nombre':nombre,
+				'apellido':apellido,				
+				'usuario':usuario,
+				'password':password,
+				'confirmpass':confirmpass,
+			}
+
+			fetch(`https://proyecto2-introduccion-program.herokuapp.com/EditarPersona/${usuario}`,{
+				method: 'PUT',
+				body: JSON.stringify(objeto),
+				headers:{
+					'Content-Type':'application/json'
+				}
+			}).then(res => res.json())
+			.catch(error => {
+				console.error('Error',error)
+				alert("There was an error in --Modify User--, see the console")				
+			})
+			.then(response =>{
+				console.log('Success:',response);
+				alert(response.message)	
+				location.href="StartingUser-pagina.html"
+			})
+		}
+
+		function Cancelar(){
+			location.href="StartingUser-pagina.html"
+		}
+	</script>
+
+</body>
+</html>
